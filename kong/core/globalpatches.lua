@@ -66,11 +66,18 @@ if ngx.RESTY_CLI then
       return true, nil, false
     end
     SharedDict.safe_set = SharedDict.set
-    function SharedDict:add(key, value)
+    function SharedDict:add(key, value, exptime)
       if self.data[key] ~= nil then
         return false, "exists", false
       end
       set(self.data, key, value)
+
+      if exptime then
+        ngx.timer.at(exptime, function()
+          self.data[key] = nil
+        end)
+      end
+
       return true, nil, false
     end
     function SharedDict:replace(key, value)
