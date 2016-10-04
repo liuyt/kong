@@ -312,6 +312,13 @@ describe("Configuration loader", function()
       assert.True(helpers.path.isabs(conf.ssl_cert))
       assert.True(helpers.path.isabs(conf.ssl_cert_key))
     end)
+    it("requires cassandra_local_datacenter if DCAwareRoundRobin is in use", function()
+      local conf, err = conf_loader(nil, {
+        cassandra_lb_policy = "DCAwareRoundRobin"
+      })
+      assert.is_nil(conf)
+      assert.equal("must specify 'cassandra_local_datacenter' when DCAwareRoundRobin policy is in use", err)
+    end)
   end)
 
   describe("errors", function()
