@@ -45,6 +45,8 @@ before_install:
 
 install:
   - make dev
+  - luarocks remove --force lua-cassandra
+  - luarocks install https://luarocks.org/manifests/thibaultcha/lua-cassandra-dev-0.rockspec
 
 script:
   - .ci/run_tests.sh
